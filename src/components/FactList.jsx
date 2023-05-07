@@ -1,9 +1,7 @@
 import React from 'react';
 import Fact from './Fact';
-import { initialFacts } from '../data';
 
-const FactList = () => {
-  const factList = initialFacts;
+const FactList = ({ factList }) => {
   return (
     <div>
       <section>
@@ -12,6 +10,7 @@ const FactList = () => {
             <Fact key={fact.id} fact={fact} />
           ))}
         </ul>
+        <p>There are {factList.length} facts. Add your own!</p>
       </section>
     </div>
   );

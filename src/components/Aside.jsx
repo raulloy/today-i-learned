@@ -12,7 +12,9 @@ const Aside = () => {
           </li>
           {categories.map((element, index) => (
             <li key={index}>
-              <button>{element.name}</button>
+              <button>
+                {element.name.charAt(0).toUpperCase() + element.name.slice(1)}
+              </button>
             </li>
           ))}
         </ul>
