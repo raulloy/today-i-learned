@@ -11,13 +11,25 @@ import Error from './components/Error';
 function App() {
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([]);
+  const [currCategory, setCurrCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const { data, error } = await supabase.from('facts').select('*');
+
+      let supabaseQuery = supabase.from('facts').select('*');
+
+      if (currCategory !== 'all') {
+        supabaseQuery = supabase
+          .from('facts')
+          .select('*')
+          .eq('category', currCategory);
+      }
+
+      const { data, error } = await supabaseQuery;
+
       if (error) {
         console.log(error);
         setError(error);
@@ -28,7 +40,7 @@ function App() {
     };
 
     fetchData();
-  }, []);
+  }, [currCategory]);
 
   return (
     <div className="container">
@@ -38,7 +50,7 @@ function App() {
       />
       {showForm ? <FactForm setFactList={setData} /> : null}
       <main>
-        <Aside />
+        <Aside setCurrCategory={setCurrCategory} />
         {isLoading ? (
           <Loader />
         ) : error ? (

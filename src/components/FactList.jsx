@@ -2,6 +2,9 @@ import React from 'react';
 import Fact from './Fact';
 
 const FactList = ({ factList }) => {
+  if (factList.length === 0) {
+    return <div>No facts for this category yet! Create the first one.</div>;
+  }
   return (
     <div>
       <section>
