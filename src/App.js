@@ -3,30 +3,32 @@ import Header from './components/Header';
 import FactForm from './components/FactForm';
 import Aside from './components/Aside';
 import FactList from './components/FactList';
-// import { initialFacts } from './data';
 import { supabase } from './supabase';
+import Loader from './components/Loader';
 import './App.css';
+import Error from './components/Error';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
   const [data, setData] = useState([]);
-
-  // const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase.from('facts').select('*');
       if (error) {
         console.log(error);
+        setError(error);
       } else {
         setData(data);
       }
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
-
-  console.log(data);
 
   return (
     <div className="container">
@@ -37,7 +39,13 @@ function App() {
       {showForm ? <FactForm setFactList={setData} /> : null}
       <main>
         <Aside />
-        <FactList factList={data} />
+        {isLoading ? (
+          <Loader />
+        ) : error ? (
+          <Error />
+        ) : (
+          <FactList factList={data} />
+        )}
       </main>
     </div>
   );
