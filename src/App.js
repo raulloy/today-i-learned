@@ -1,14 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import FactForm from './components/FactForm';
 import Aside from './components/Aside';
 import FactList from './components/FactList';
-import { initialFacts } from './data';
+// import { initialFacts } from './data';
+import { supabase } from './supabase';
 import './App.css';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
-  const [factList, setFactList] = useState(initialFacts);
+  const [data, setData] = useState([]);
+
+  // const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('facts').select('*');
+      if (error) {
+        console.log(error);
+      } else {
+        setData(data);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(data);
 
   return (
     <div className="container">
@@ -16,10 +34,10 @@ function App() {
         onButtonClick={() => setShowForm(!showForm)}
         showForm={showForm}
       />
-      {showForm ? <FactForm setFactList={setFactList} /> : null}
+      {showForm ? <FactForm setFactList={setData} /> : null}
       <main>
         <Aside />
-        <FactList factList={factList} />
+        <FactList factList={data} />
       </main>
     </div>
   );
