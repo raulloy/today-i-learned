@@ -5,8 +5,8 @@ import Aside from './components/Aside';
 import FactList from './components/FactList';
 import { supabase } from './supabase';
 import Loader from './components/Loader';
-import './App.css';
 import Error from './components/Error';
+import './App.css';
 
 function App() {
   const [showForm, setShowForm] = useState(false);
@@ -56,7 +56,7 @@ function App() {
         ) : error ? (
           <Error />
         ) : (
-          <FactList factList={data} />
+          <FactList factList={data} setFactList={setData} />
         )}
       </main>
     </div>
